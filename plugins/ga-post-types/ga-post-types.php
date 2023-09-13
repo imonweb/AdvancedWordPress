@@ -13,7 +13,7 @@ add_action('init', 'ga_events_post_type', 0 );
 
 function ga_recipe_post_type() {
 
- 
+      // Labels for the Post Type
     $labels = array(
       'name'                => _x( 'Recipes', 'Post Type General Name', 'gourmet-artist' ),
       'singular_name'       => _x( 'Recipe', 'Post Type Singular Name', 'gourmet-artist' ),
