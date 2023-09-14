@@ -11,7 +11,7 @@ License: URI: https://www.gnu.org/licenses/gpl-2.0.html
 add_action('init', 'ga_recipe_post_type', 0 );
 add_action('init', 'ga_events_post_type', 0 );
 
-function ga_recipe_post_type() {
+// function ga_recipe_post_type() {
 
       // Labels for the Post Type
     $labels = array(
