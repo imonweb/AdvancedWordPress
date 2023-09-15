@@ -16,6 +16,148 @@ if ( ! function_exists( 'gourmet_artistry_setup' ) ) :
  * as indicating support for post thumbnails.
  */
 
+ function recipe_breakfast(){
+ 	$args = array(
+ 		 'post_type' => 'recipes',
+ 		 'posts_per_page' => 3,
+ 		 'orderby' => 'rand',
+ 		 'tax_query' => array(
+ 				 array(
+ 						'taxonomy' => 'meal-type',
+ 						'field' => 'slug',
+ 						'terms' => 'breakfast'
+ 				 ),
+ 		 ),
+ 	);
+ 	$posts = get_posts($args);
+ 	$recipes = array();
+ 	foreach($posts as $post) {
+ 		setup_postdata( $post );
+ 		$recipes[] = array(
+ 			'id' => $post->ID,
+ 			'name' => $post->post_title,
+ 			'image' => get_the_post_thumbnail( $post->ID, 'entry'),
+ 			'link' => get_permalink( $post->ID),
+ 		);
+ 	}
+ 	header("Content-type: application/json");
+ 	echo json_encode($recipes);
+ 	die;
+
+ }
+ add_action('wp_ajax_nopriv_recipe_breakfast', 'recipe_breakfast');
+ add_action('wp_ajax_recipe_breakfast', 'recipe_breakfast');
+
+
+ function recipe_lunch(){
+	 $args = array(
+		 	'post_type' => 'recipes',
+			'posts_per_page' => 3,
+			'orderby' => 'rand',
+			'tax_query' => array(
+					array(
+						 'taxonomy' => 'meal-type',
+						 'field' => 'slug',
+						 'terms' => 'lunch'
+					),
+			),
+	 );
+	 $posts = get_posts($args);
+	 $recipes = array();
+	 foreach($posts as $post) {
+		 setup_postdata( $post );
+		 $recipes[] = array(
+			 'id' => $post->ID,
+			 'name' => $post->post_title,
+			 'image' => get_the_post_thumbnail( $post->ID, 'entry'),
+			 'link' => get_permalink( $post->ID),
+		 );
+	 }
+	 header("Content-type: application/json");
+	 echo json_encode($recipes);
+	 die;
+
+}
+add_action('wp_ajax_nopriv_recipe_lunch', 'recipe_lunch');
+add_action('wp_ajax_recipe_lunch', 'recipe_lunch');
+
+
+function recipe_dinner(){
+	$args = array(
+		 'post_type' => 'recipes',
+		 'posts_per_page' => 3,
+		 'orderby' => 'rand',
+		 'tax_query' => array(
+				 array(
+						'taxonomy' => 'meal-type',
+						'field' => 'slug',
+						'terms' => 'dinner'
+				 ),
+		 ),
+	);
+	$posts = get_posts($args);
+	$recipes = array();
+	foreach($posts as $post) {
+		setup_postdata( $post );
+		$recipes[] = array(
+			'id' => $post->ID,
+			'name' => $post->post_title,
+			'image' => get_the_post_thumbnail( $post->ID, 'entry'),
+			'link' => get_permalink( $post->ID),
+		);
+	}
+	header("Content-type: application/json");
+	echo json_encode($recipes);
+	die;
+
+}
+add_action('wp_ajax_nopriv_recipe_dinner', 'recipe_dinner');
+add_action('wp_ajax_recipe_dinner', 'recipe_dinner');
+
+function filter_course_terms($term) {
+	$args = array(
+		'posts_per_page' => 4,
+		'post_type' => 'recipes',
+		'orderby' => 'rand',
+		'tax_query' => array(
+			array(
+				'taxonomy' => 'course',
+				'field' => 'slug',
+				'terms' => $term,
+			)
+		),
+	);
+
+	$query = new WP_Query($args);
+ 	 echo '<div id="' . $term . '" class="row">';
+	 while($query->have_posts() ): $query->the_post();
+
+	echo '<div class="small-6 medium-3 columns">';
+	echo '<div class="recipe">';
+  echo '<a href="' .get_the_permalink($post->ID) . '">';
+	echo get_the_post_thumbnail( $post->ID, 'filter-recipes');
+	echo '</a>';
+	echo '<h3 class="text-center">' . get_the_title() . '</h3>';
+	echo '</div>';
+	echo '</div>';
+
+	endwhile;
+	echo "</div>";
+	wp_reset_postdata();
+}
+
+function print_recipes_posts($query) {
+
+	//not the admin but the main query
+	if(!is_admin() && $query->is_main_query()) {
+		//add post to home
+		if(is_home()) {
+			$query->set('post_type', array('post', 'recipes'));
+		}
+	}
+}
+add_action('pre_get_posts', 'print_recipes_posts');
+
 function gourmet_artistry_exerpt($length) {
 	return 30;
 }
@@ -51,6 +193,7 @@ function gourmet_artistry_setup() {
 	add_image_size( 'slider', 1200, 475, true );
 	add_image_size( 'entry', 619, 462, true );
 	add_image_size( 'single-image', 800, 300, true );
+	add_image_size( 'filter-recipes', 540, 800, true );
 
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus( array(
@@ -118,14 +261,25 @@ function gourmet_artistry_scripts() {
 
 	wp_enqueue_style('foundation-icons', get_template_directory_uri() . '/css/foundation-icons.css'  );
 
+  wp_enqueue_style('banner', get_template_directory_uri() . '/css/banner.css'  );
+
   wp_enqueue_script('jquery');
+  
 	wp_enqueue_script( 'gourmet-artistry-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
 
 	wp_enqueue_script( 'gourmet-artistry-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
 
 	wp_enqueue_script('foundation-js', get_template_directory_uri() . '/js/foundation.js', array('jquery'), '20151215', true );
+
   wp_enqueue_script('what-input', get_template_directory_uri() . '/js/what-input.min.js', array(), '20151215', true );
+
+  wp_enqueue_script('filterizr', get_template_directory_uri() . '/js/jquery.filterizr.js', array(), '20151215', true );
+
   wp_enqueue_script('app-js', get_template_directory_uri() . '/js/app.js', array(), '20151215', true );
+
+	wp_localize_script( 'app-js', 'admin_url', array(
+			'ajax_url' => admin_url('admin-ajax.php')
+	) );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );

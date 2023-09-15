@@ -18,7 +18,12 @@
 		<?php } else { ?>
 			<div class="large-6 columns">
 				<?php the_post_thumbnail('entry'); ?>
+				<?php
+					if( is_home()): ?>
+						<span class="alert label"><?php echo get_post_type(); ?></span>
+				<?php endif; ?>
 			</div>
+
 	<?php } ?>
 
 	<div class="<?php echo is_single() ? 'large-12' : 'large-6' ?> columns">
@@ -40,6 +45,58 @@
 	</header><!-- .entry-header -->
 
 	<div class="entry-content">
+		<?php if('recipes' === get_post_type()): ?>
+				<div class="taxonomies">
+						<div class="price-range">
+							<?php
+								echo get_the_term_list( $post->ID, 'price_range', 'Price Range: ', ', ', '' );
+							?>
+						</div>
+						<div class="meal-type">
+							<?php
+								echo get_the_term_list( $post->ID, 'meal-type', 'Meal: ', ', ', '' );
+							?>
+						</div>
+						<div class="course">
+							<?php
+								echo get_the_term_list( $post->ID, 'course', 'Course: ', ', ', '' );
+							?>
+						</div>
+						<div class="mood">
+							<?php
+									echo get_the_term_list( $post->ID, 'mood', 'Mood: ', ', ', '' );
+							?>
+						</div>
+				</div>
+
+					<?php if(is_single()): ?>
+							<div class="extra-information">
+								<div class="row">
+
+										<?php $calories = get_post_meta(get_the_ID(), 'input-metabox', true ); ?>
+										<?php if($calories) {?>
+											<div class="calories small-6 columns">
+														<p>Calories: <em> <?php echo $calories; ?></em></p>
+											</div>
+										<?php } ?>
+
+										<?php $rating = get_post_meta(get_the_ID(), 'dropdown-metabox', true ); ?>
+										<?php if($rating) {?>
+											<div class="rating small-6 columns">
+														<p>Rating: <em> <?php echo $rating; ?></em> Stars</p>
+											</div>
+										<?php } ?>
+								</div> <!--.row-->
+
+									<?php $description = get_post_meta(get_the_ID(), 'textarea-metabox', true ); ?>
+									<?php if($description) {?>
+												<blockquote><p><?php echo $description; ?></p></blockquote>
+									<?php } ?>
+							</div> <!--.extra-information -->
+				<?php endif; //is_single() ?>
+
+
+		<?php endif; ?>
 		<?php
 			if(is_single()) {
 				the_content( sprintf(
@@ -58,6 +115,11 @@
 			) );
 		?>
 	</div><!-- .entry-content -->
+
+
+	<a id="next_post_btn" class="previous_post_link" data-previous-post="<?php echo  get_previous_post()->ID  ; ?>">
+				Previous Post
+	</a>
 
 	</div>
 </article><!-- #post-## -->

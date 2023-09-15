@@ -14,7 +14,37 @@
 
 get_header(); ?>
 
-<?php get_template_part('template-parts/slider', 'entries'); ?>
+<?php // get_template_part('template-parts/slider', 'entries'); ?>
+
+<div class="meal-recipes row">
+	<h2 id="time" class="text-center">Make this for: </h2>
+	<ul id="meal-per-hour" class="no-bullet">
+
+	</ul>
+</div>
+
+<div id="filter">
+		<h2 class="text-center">Filter by Course: </h2>
+
+				<div class="menu-centered">
+						<ul class="menu">
+						<?php
+							$terms = get_terms(array(
+									'taxonomy' => 'course'
+							) );
+							foreach($terms as $term){
+								echo "<li><a href='#{$term->slug}'>{$term->name}</a></li>";
+							}
+						?>
+						</ul>
+				</div> <!--.menu-centered-->
+				<div id="recipes">
+					<?php foreach($terms as $term){
+							filter_course_terms($term->slug);
+					} ?>
+				</div> <!--#recipes-->
+</div> <!--#filter-->
+
 
 <div class="row">
 	<div id="primary" class="content-area medium-8 columns">
