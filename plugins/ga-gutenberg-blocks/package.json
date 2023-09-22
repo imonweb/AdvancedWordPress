@@ -4,7 +4,8 @@
   "description": "Adds Gutenberg Blocks into the Website",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "wp-scripts build",
+    "start": "wp-scripts start"
   },
   "keywords": [
     "WP-Scripts",
@@ -13,5 +14,10 @@
     "JS"
   ],
   "author": "John Doe",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "@wordpress/scripts": "^26.13.0",
+    "url-loader": "^4.1.1"
+  }
 }
