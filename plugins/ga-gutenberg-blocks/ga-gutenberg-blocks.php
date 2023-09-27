@@ -32,4 +32,35 @@ function ga_register_gutenberg_blocks() {
     array('wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor'), // dependencies
     filemtime( plugin_dir_path( __FILE__ ) . 'build/index.js') // version
   );
+
+  // Gutenberg Editor CSS (Backend)
+  wp_register_style(
+    'ga-editor-styles', // name
+    plugins_url( 'build/index.js', __FILE__ ), // file
+    array(), //dependencies
+    filemtime( plugin_dir_path( __FILE__ ) . 'build/editor.css') // version
+  );
+
+  // Front-end Stylesheet
+  wp_register_style(
+    'ga-front-end-styles', // name
+    plugins_url( 'build/index.js', __FILE__ ), // file
+    array(), //dependencies
+    filemtime( plugin_dir_path( __FILE__ ) . 'build/style.css') // version
+  );
+
+  // An array of blocks
+  $blocks = array(
+    'ga/testimonial'
+    
+  );
+
+  // Add the blocks and register the stylesheets
+  foreach($blocks as $block){
+    register_block_type( $block, array(
+      'editor_script' => 'ga-editor-script',
+      'editor_style' => 'ga-editor-style', // backend css
+      'style' => 'ga-front-end-styles', // front end css
+    ) );
+  } 
 }
