@@ -56,11 +56,11 @@ function ga_register_gutenberg_blocks() {
   );
 
   // Add the blocks and register the stylesheets
-//   foreach($blocks as $block){
-//     register_block_type( $block, array(
-//       'editor_script' => 'ga-editor-script',
-//       'editor_style' => 'ga-editor-style', // backend css
-//       'style' => 'ga-front-end-styles', // front end css
-//     ) );
-//   } 
-// }
+  foreach($blocks as $block){
+    register_block_type( $block, array(
+      'editor_script' => 'ga-editor-script',
+      'editor_style' => 'ga-editor-style', // backend css
+      'style' => 'ga-front-end-styles', // front end css
+    ) );
+  } 
+}
