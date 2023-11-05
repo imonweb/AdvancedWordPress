@@ -63,5 +63,5 @@ function ga_register_gutenberg_blocks() {
       'style' => 'ga-front-end-styles', // front end css
     ) );
   } 
-
+}
 
