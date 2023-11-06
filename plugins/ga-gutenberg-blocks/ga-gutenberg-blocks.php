@@ -42,12 +42,14 @@ function ga_register_gutenberg_blocks() {
   );
 
   // Front-end Stylesheet
-  wp_register_style(
-    'ga-front-end-styles', // name
-    plugins_url( 'build/index.js', __FILE__ ), // file
-    array(), //dependencies
-    filemtime( plugin_dir_path( __FILE__ ) . 'build/style.css') // version
-  );
+ 
+
+   wp_register_style(
+        'ga-front-end-styles', // name
+        plugins_url( 'build/style.css', __FILE__ ), // file
+        array(), // dependencies
+        filemtime( plugin_dir_path( __FILE__ ) . 'build/style.css') // version
+    );
 
   // An array of blocks
   $blocks = array(
@@ -64,4 +66,23 @@ function ga_register_gutenberg_blocks() {
     ) );
   } 
 }
+
+/*  Custom Categories */
+
+add_filter('block_categories', 'ga_new_gutenberg_category', 10, 2);
+function ga_new_gutenberg_category( $categories, $post ) {
+  return array_merge(
+    $categories,
+    array(
+      array(
+        'slug' => 'gourmet-artist',
+        'title' => 'Gourmet Artist',
+        'icon' => 'awards'
+      ),
+    )
+  );
+
+}
+
+
 
